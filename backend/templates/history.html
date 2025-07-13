@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <section class="history-header">
+        <h2>Analysis History</h2>
+        <p>Recent property analyses performed</p>
+    </section>
+
+    <section class="history-list">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Property</th>
+                    <th>Result</th>
+                    <th>Confidence</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in history %}
+                    <tr>
+                        <td>{{ item.analysis_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td><a href="{{ item.url }}" target="_blank">{{ item.title|truncate(40) }}</a></td>
+                        <td class="{{ 'suspicious' if item.result else 'clean' }}">
+                            {{ 'Suspicious' if item.result else 'Clean' }}
+                        </td>
+                        <td>{{ (item.confidence * 100)|round }}%</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">No analysis history found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

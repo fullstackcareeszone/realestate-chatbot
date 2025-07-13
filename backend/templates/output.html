@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="analysis-results">
+    <h2>Analysis Results</h2>
+    
+    <div class="verdict {% if analysis.final_verdict.startswith('High') %}suspicious{% elif analysis.final_verdict.startswith('Some') %}warning{% else %}clean{% endif %}">
+        {{ analysis.final_verdict }}
+        <span class="confidence">(Confidence: {{ (analysis.confidence * 100)|round }}%)</span>
+    </div>
+
+    {% if analysis.reasons %}
+    <div class="reasons">
+        <h3>Key Findings:</h3>
+        <ul>
+            {% for reason in analysis.reasons %}
+            <li>{{ reason }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="property-details">
+        <h3>Property Details</h3>
+        <p><strong>Title:</strong> {{ property.title or 'Not available' }}</p>
+        <p><strong>Price:</strong> {{ property.price or 'Not specified' }}</p>
+        <p><strong>Location:</strong> {{ property.location or 'Not specified' }}</p>
+        
+        <h4>Description:</h4>
+        <p>{{ property.description or 'No description provided' }}</p>
+        
+        {% if property.image_urls %}
+        <h4>Images:</h4>
+        <div class="image-gallery">
+            {% for img_url in property.image_urls %}
+            <img src="{{ img_url }}" alt="Property image" loading="lazy">
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
