@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify,redirect , url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import requests
 from zameen_scraper import ZameenScraper  
 from fake_detection import FakeDetector
@@ -10,12 +10,16 @@ import time
 
 app = Flask(__name__)
 app.config.from_object(Config)
-scraper = ZameenScraper()
-property_data = scraper.scrape_property("https://www.zameen.com/property/example.html")
 
 # Initialize components
 db = Database()
 detector = FakeDetector()
+
+# Create tables at startup
+try:
+    db.create_tables()
+except Exception as e:
+    logger.error(f"Failed to create tables: {e}")
 
 @app.route('/')
 def index():
@@ -29,6 +33,7 @@ def analyze():
 
     try:
         # Scrape property data
+        scraper = ZameenScraper()
         property_data = scraper.scrape_property(url)
         if not property_data:
             return render_template('index.html', error="Failed to scrape property data")
@@ -51,8 +56,10 @@ def analyze():
 
         # Save to database
         property_data['analysis'] = analysis
-        if not db.save_property(property_data):
-            logger.warning("Database save completed with possible issues")
+        try:
+            db.save_property(property_data)
+        except Exception as db_error:
+            logger.error(f"Database save failed: {db_error}")
 
         return render_template('output.html', **template_data)
 
@@ -62,23 +69,24 @@ def analyze():
             'index.html',
             error="Technical error during analysis. Please try again later."
         )
+
 @app.route('/history')
 def history():
-    history_data = db.get_history()
-    return render_template('history.html', history=history_data)
+    try:
+        history_data = db.get_history()
+        return render_template('history.html', history=history_data)
+    except Exception as e:
+        logger.error(f"Failed to fetch history: {e}")
+        return render_template('history.html', history=[], error="Failed to load history")
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
-        # Process contact form
         name = request.form.get('name')
         email = request.form.get('email')
         message = request.form.get('message')
         
-        # Here you would typically send an email
-        # For now, just log it
         logger.info(f"Contact form submitted: {name}, {email}, {message}")
-        
         return render_template('contact.html', success=True)
     
     return render_template('contact.html')
@@ -88,7 +96,6 @@ def chatbot():
     try:
         message = request.json.get('message')
         
-        # Call Gemini API
         response = requests.post(
             f"{app.config['GEMINI_API_URL']}?key={app.config['GEMINI_API_KEY']}",
             json={
@@ -111,11 +118,6 @@ def chatbot():
         return jsonify({'reply': "Sorry, I'm having trouble responding right now."})
 
 if __name__ == '__main__':
-    # Ensure data directories exist
     os.makedirs(app.config['IMAGE_FOLDER'], exist_ok=True)
     os.makedirs(os.path.dirname(app.config['CSV_FILE']), exist_ok=True)
-    
-    # Create database tables
-    db.create_tables()
-    
     app.run(debug=True)

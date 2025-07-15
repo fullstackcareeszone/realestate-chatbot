@@ -42,8 +42,9 @@ class FakeDetector:
                 json={"inputs": text_to_analyze[:512]},
                 timeout=self.timeout
             )
-            if sentiment_response.status_code == 200:
-                sentiment = sentiment_response.json()
+            sentiment_response.raise_for_status()
+            sentiment = sentiment_response.json()
+            if sentiment and isinstance(sentiment, list) and len(sentiment) > 0:
                 label = sentiment[0][0]['label']
                 score = sentiment[0][0]['score']
                 if label == 'POSITIVE' and score > 0.85:
@@ -60,8 +61,9 @@ class FakeDetector:
                 json={"inputs": text_to_analyze[:512]},
                 timeout=self.timeout
             )
-            if fake_response.status_code == 200:
-                fake_result = fake_response.json()
+            fake_response.raise_for_status()
+            fake_result = fake_response.json()
+            if fake_result and isinstance(fake_result, list) and len(fake_result) > 0:
                 label = fake_result[0][0]['label']
                 score = fake_result[0][0]['score']
                 if label == 'LABEL_1' and score > 0.7:

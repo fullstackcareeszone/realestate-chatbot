@@ -170,8 +170,9 @@ class ZameenScraper:
         for selector, selector_type in selectors:
             try:
                 if selector_type == 'xpath':
-                    element = WebDriverWait(driver, 5).until()
-                    EC.presence_of_element_located((By.XPATH, selector))
+                    element = WebDriverWait(driver, 5).until(
+                        EC.presence_of_element_located((By.XPATH, selector))
+                    )
                     return element.text.strip()
                 elif selector_type == 'css':
                     element = soup.select_one(selector)
@@ -181,7 +182,7 @@ class ZameenScraper:
                     element = soup.find(selector)
                     if element:
                         return element.get_text(strip=True)
-            except:
+            except Exception:
                 continue
         return None
 
@@ -215,7 +216,7 @@ class ZameenScraper:
                     if container:
                         feature_text = container.get_text()
                         break
-            except:
+            except Exception:
                 continue
         
         # Extract features using regex
@@ -255,7 +256,7 @@ class ZameenScraper:
             read_more = driver.find_element(By.XPATH, '//button[contains(text(), "Read More")]')
             driver.execute_script("arguments[0].click();", read_more)
             time.sleep(1)
-        except:
+        except Exception:
             pass
         
         # Try multiple description selectors
@@ -276,7 +277,7 @@ class ZameenScraper:
                     if element:
                         description = element.get_text(strip=True)
                         break
-            except:
+            except Exception:
                 continue
                 
         return description
@@ -290,7 +291,7 @@ class ZameenScraper:
             gallery = driver.find_element(By.XPATH, '//div[contains(@class, "gallery")]')
             images = gallery.find_elements(By.TAG_NAME, 'img')
             image_urls.extend([img.get_attribute('src') for img in images if img.get_attribute('src')])
-        except:
+        except Exception:
             pass
         
         # Approach 2: Find all images with certain classes
@@ -307,7 +308,7 @@ class ZameenScraper:
                     src = img.get('src')
                     if src and src.startswith('http'):
                         image_urls.append(src)
-            except:
+            except Exception:
                 continue
         
         # Deduplicate and filter
@@ -323,6 +324,9 @@ class ZameenScraper:
             driver = self.setup_driver()
             property_data = self.scrape_property_details(driver, url)
             return property_data
+        except Exception as e:
+            logger.error(f"Error in scrape_property: {e}")
+            return None
         finally:
             if driver:
                 driver.quit()
@@ -331,4 +335,4 @@ if __name__ == "__main__":
     scraper = ZameenScraper()
     test_url = "https://www.zameen.com/property/details-123.html"
     data = scraper.scrape_property(test_url)
-    print(data)
+    print(data) 

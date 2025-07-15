@@ -4,9 +4,13 @@
     <section class="history-header">
         <h2>Analysis History</h2>
         <p>Recent property analyses performed</p>
+        {% if error %}
+            <div class="error-message">{{ error }}</div>
+        {% endif %}
     </section>
 
     <section class="history-list">
+        {% if history %}
         <table>
             <thead>
                 <tr>
@@ -24,14 +28,13 @@
                         <td class="{{ 'suspicious' if item.result else 'clean' }}">
                             {{ 'Suspicious' if item.result else 'Clean' }}
                         </td>
-                        <td>{{ (item.confidence * 100)|round }}%</td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="4">No analysis history found</td>
+                        <td>{{ (item.confidence * 100)|round(1) }}%</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+            <div class="no-history">No analysis history found</div>
+        {% endif %}
     </section>
 {% endblock %}
