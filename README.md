@@ -1,130 +1,75 @@
-# Real Estate Chatbot 🏠💬
+# 🏠 Fake Property Detection System
 
-A smart chatbot that helps users find real estate properties using natural language queries, powered by Gemini AI and web scraping.
+## 📌 Project Overview
 
-## Features ✨
+**Fake Property Detection System** is an intelligent, AI-powered web application designed to validate the authenticity of online property listings. Targeted primarily at listings from platforms like **Zameen.com**, this system helps users detect fraudulent or misleading property ads by analyzing their content, images, and metadata using machine learning and large language models (LLMs).
 
-- **Natural Language Processing**: Understands user queries like "Find 2-bedroom villas in Dubai under 2 million"
-- **Property Database**: Scrapes and stores property data from Zameen.com
-- **Smart Search**: Converts natural language to database queries
-- **Chat Interface**: Interactive UI with conversation history
-- **Automatic Updates**: Periodic web scraping to keep property data fresh
+---
 
-## Technologies Used 🛠️
+## 🔍 Key Features
 
-- **Python** (Flask backend)
-- **Gemini AI** (Natural language processing)
-- **SQLite** (Database)
-- **Bootstrap 5** (Frontend UI)
-- **BeautifulSoup** (Web scraping)
+- ✅ **Fake Listing Detection** – Automatically identifies suspicious or potentially fake property listings using ML algorithms.
+- 🧠 **LLM-Powered Analysis** – Utilizes Gemini API and Hugging Face models to evaluate property descriptions, metadata, and other textual cues.
+- 🖼️ **Fake Image Detection** – Flags AI-generated or manipulated images to enhance listing credibility.
+- 🤖 **AI Chatbot Assistant** – Gemini-based chatbot answers property-related queries and explains listing authenticity.
+- 🔗 **URL-Based Input** – Users paste Zameen.com property links for real-time analysis.
+- 👥 **Role-Based Access** – Includes Admin and Verified User roles with distinct permissions and dashboards.
 
-## Project Structure 📂
+---
 
-realestate-chatbot/
-├── app/
-│ ├── init.py # Flask application factory
-│ ├── models.py # Database models
-│ ├── routes.py # API routes
-│ ├── scraper.py # Property data scraper
-│ ├── utils/
-│ │ ├── ai_helper.py # Gemini AI integration
-│ │ └── db_helper.py # Database operations
-│ └── templates/
-│ └── index.html # Chat interface
-├── static/ # CSS/JS files
-├── config.py # Configuration settings
-├── requirements.txt # Python dependencies
-└── run.py # Application entry point
+## 🛠️ Tech Stack
 
-text
+| Component        | Technology                         |
+|------------------|-------------------------------------|
+| **Backend**      | Python, Flask                       |
+| **ML/AI Models** | Gemini API, Hugging Face Transformers |
+| **Web Scraping** | BeautifulSoup, Requests (Zameen.com) |
+| **Database**     | PostgreSQL                          |
+| **Chatbot**      | Gemini API                          |
+| **Hosting**      | Render / Heroku / Replit *(optional)* |
 
-## Installation 💻
+---
 
-1. **Clone the repository**
+## ⚙️ System Workflow
+
+1. **User Authentication** – Admin or Verified User logs in to the system.
+2. **Paste Property URL** – User submits a property link from Zameen.com.
+3. **Web Scraping** – System extracts key data and images from the listing.
+4. **ML Model Analysis** – Models evaluate textual content, image metadata, and structure.
+5. **Chatbot Interaction** – User can ask questions about the property and get AI-based feedback.
+6. **Prediction Output** – System displays whether the listing is *Fake* or *Genuine*.
+
+---
+
+## 🔐 User Roles
+
+- 🛠️ **Admin**:
+  - Manage all users.
+  - Monitor submitted listings and model activity logs.
+  - Maintain and update system settings.
+
+- ✅ **Verified User**:
+  - Paste and analyze property links.
+  - Access chatbot for property information.
+  - View personal submission history.
+
+> ℹ️ *Guest user functionality may be introduced in future versions.*
+
+---
+
+## 📈 Planned Enhancements
+
+- 📝 **Suspicious Listing Reporting** – Allow users to flag or report questionable properties.
+- 🧠 **Advanced NLP Models** – Enhance detection accuracy using fraud pattern recognition and deeper context analysis.
+- 🔗 **Blockchain Integration** – Verify property documentation authenticity using decentralized systems.
+- 📂 **Manual Uploads** – Support file-based data input (e.g., CSV, Excel).
+- 🔔 **Real-Time Notifications** – Email or SMS alerts for users when fake properties are detected.
+
+---
+
+## 🚀 How to Run the Project
+
+1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/realestate-chatbot.git
-   cd realestate-chatbot
-Set up virtual environment
-
-bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-Install dependencies
-
-bash
-pip install -r requirements.txt
-Set up environment variables
-Create a .env file with your Gemini API key:
-
-text
-GEMINI_API_KEY=your_api_key_here
-Running the Application 🚀
-bash
-python run.py
-The application will be available at http://localhost:5000
-
-Configuration ⚙️
-Modify config.py to change:
-
-Database settings
-
-Scraping frequency
-
-Gemini model configuration
-
-How It Works 🔍
-User enters natural language query
-
-Gemini AI converts query to database filters
-
-System searches property database
-
-Results are displayed in chat interface
-
-Background scraper periodically updates property data
-
-Contributing 🤝
-Fork the repository
-
-Create your feature branch (git checkout -b feature/AmazingFeature)
-
-Commit your changes (git commit -m 'Add some AmazingFeature')
-
-Push to the branch (git push origin feature/AmazingFeature)
-
-Open a Pull Request
-
-License 📜
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-Screenshots 🖼️
-https://screenshots/chat-interface.png
-https://screenshots/property-results.png
-
-Contact 📧
-For questions or support, contact: your.email@example.com
-
-text
-
-### Additional recommendations:
-
-1. Create a `screenshots` folder and add actual screenshots of your application
-2. Add a `LICENSE` file if you want to open-source the project
-3. Include a `.gitignore` file with:
-.venv/
-pycache/
-*.pyc
-.env
-*.sqlite
-
-text
-
-This README provides:
-- Clear project description
-- Installation instructions
-- Usage guide
-- Technical documentation
-- Contribution guidelines
-- Visual examples
-
-You can customize the contact information, license, and screenshots as needed for your specific project.
+   git clone https://github.com/yourusername/fake-property-detection.git
+   cd fake-property-detection
