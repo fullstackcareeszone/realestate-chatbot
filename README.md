@@ -67,9 +67,3 @@
 
 ---
 
-## 🚀 How to Run the Project
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/yourusername/fake-property-detection.git
-   cd fake-property-detection
